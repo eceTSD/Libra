@@ -1,0 +1,443 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>MapTest</title>
+
+  <style>
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
+
+</style>
+
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #E4E1EA;
+    font: normal 17px/1.5 Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+    color: #5E5F63;
+}
+.wrapper {
+    width: 230px;
+    margin: 20px;
+    float:left;
+}
+p {
+    margin: 15px 0 5px 0;
+}
+li span {
+    display: inline-block;
+    vertical-align: top;
+}
+strong {
+    font-weight: bold;
+}
+.radio-btn input[type="radio"], .check-box input[type="checkbox"] {
+    visibility: hidden;
+}
+/*Custom checkbox*/
+ .check-box {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    display: inline-block;
+    margin: 2px 7px 0 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 1px #ccc;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background: rgb(255, 255, 255);
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 1)), color-stop(47%, rgba(246, 246, 246, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
+    background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed', GradientType=0);
+    border: 1px solid #ccc;
+}
+.check-box i {
+    background: url('css/check_mark.png') no-repeat center center;
+    position: absolute;
+    left: 3px;
+    bottom: -15px;
+    width: 16px;
+    height: 16px;
+    opacity: .5;
+    -webkit-transition: all 400ms ease-in-out;
+    -moz-transition: all 400ms ease-in-out;
+    -o-transition: all 400ms ease-in-out;
+    transition: all 400ms ease-in-out;
+    -webkit-transform:rotateZ(-180deg);
+    -moz-transform:rotateZ(-180deg);
+    -o-transform:rotateZ(-180deg);
+    transform:rotateZ(-180deg);
+}
+.checkedBox {
+    -moz-box-shadow: inset 0 0 5px 1px #ccc;
+    -webkit-box-shadow: inset 0 0 5px 1px #ccc;
+    box-shadow: inset 0 0 5px 1px #ccc;
+    border-bottom-color: #fff;
+}
+        .checkedBox i {
+            bottom: 2px;
+            -webkit-transform: rotateZ(0deg);
+            -moz-transform: rotateZ(0deg);
+            -o-transform: rotateZ(0deg);
+            transform: rotateZ(0deg);
+        }
+
+
+
+</style>
+
+    <script src="js/prefixfree.min.js"></script>
+    <script type="text/javascript">
+    dojoConfig = {
+        parseOnLoad: true,
+        packages: [{
+            name: 'tdlib',
+            location:"/js/tdlib"
+        }]
+    };
+    </script>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.6/js/esri/css/esri.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.6/js/dojo/dijit/themes/tundra/tundra.css">
+
+    <script src="http://js.arcgis.com/3.6/"></script>
+
+
+    
+
+</head>
+
+<body >
+    <div class="wrapper">
+        <ul>
+            <li>
+                <p>图层选择:</p>
+            </li>
+            <li>
+                <input type="checkbox" name="check-box" id="layer"  /> <span>动态比例尺中国地质图</span>
+            </li>
+            <li>
+                <input type="checkbox" name="check-box" id="25w" /> <span>1:25万中国地质图</span>
+            </li>
+            <li>
+                <input type="checkbox" name="check-box" id="50w" /> <span>1:50万中国地质图</span>
+            </li>
+            <li>
+                <input type="checkbox" name="check-box" id="100w" /> <span>1:100万中国地质图</span>
+            </li>
+            <li>
+                <input type="checkbox" name="check-box"id="250w" /> <span>1:250万中国地质图</span>
+            </li>
+            <li>
+                <input type="checkbox" name="check-box" id="500w" /> <span>1:500万中国地质图</span>
+            </li>
+            <li>
+                <input type="checkbox" name="check-box" id="500aw" /> <span>1:500万亚洲地质图</span>
+            </li>
+            <li>
+                <input type="checkbox" name="check-box" id="7500w" /> <span>1:7500万全球构造分布图</span>
+            </li>
+            <li>
+                <input type="checkbox" name="check-box" id="sx" checked="checked"/> <span>属性</span>
+            </li>
+            <li>
+                <input type="button" value="画线" onclick="Polyline()" style="width:30px;height:auto"/>
+            </li>
+        </ul>
+    </div>
+    <div id="map" style="height:100%;width:100%"></div>
+    <script src="js/jquery.js"></script>
+    <script type="text/javascript">
+    var map, mylayer;
+    require(["esri/map",
+        "tdlib/TDTLayer",
+        "tdlib/TDTAnnoLayer",
+        "esri/layers/WMSLayer",
+        "esri/layers/FeatureLayer",
+        "esri/geometry/Extent",
+        "esri/geometry/Point",
+        "esri/toolbars/draw",
+        "esri/graphic",
+        "esri/SpatialReference",
+        "esri/symbols/SimpleFillSymbol",
+        "esri/symbols/SimpleLineSymbol",
+        "dojo/_base/Color",
+        "dojo/domReady!"],
+    function (Map,
+         TDTLayer,
+         TDTAnnoLayer,
+         WMSLayer,
+         SpatialReference,
+         FeatureLayer,
+         Point,
+         Draw,
+         Graphic,
+         Extent,
+         SimpleFillSymbol,
+         SimpleLineSymbol,
+         Color
+    ) {
+        map = new Map("map", { logo: false });
+        var basemap = new TDTLayer();
+        map.addLayer(basemap);
+        var annolayer = new TDTAnnoLayer();
+        map.addLayer(annolayer);
+        navDraw = new Draw(map);
+        navDraw.on("draw-end", addToMap);
+        dojo.connect(map, "onClick", myOnClickHandler);
+        //dojo.connect(navDraw, "onDrawEnd", doMeasure);      
+         
+        
+        dojo.declare("Mylayer", TDTLayer, {
+            getTileUrl: function (level, row, col) {
+                return "http://219.142.81.86/igserver/ogc/kvp/TAS10A52299999/WMTSServer/1.0.0/TAS10A52299999/default/TAS10A52299999_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
+            }
+        });
+        Mylayer = new Mylayer();
+      //  map.addLayer(Mylayer);
+       
+
+        dojo.declare("Mylayer25", TDTLayer, {
+            getTileUrl: function (level, row, col) {
+                return "http://219.142.81.86/igserver/ogc/kvp/TAS10C52000000/WMTSServer/1.0.0/TAS10C52000000/default/TAS10C52000000_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
+            }
+        });
+        Mylayer25 = new Mylayer25();
+       
+
+        dojo.declare("Mylayer50", TDTLayer, {
+            getTileUrl: function (level, row, col) {
+                return "http://219.142.81.86/igserver/ogc/kvp/TAS10B52000000/WMTSServer/1.0.0/TAS10B52000000/default/TAS10B52000000_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
+            }
+        });
+        Mylayer50 = new Mylayer50();
+       
+
+        dojo.declare("Mylayer100", TDTLayer, {
+            getTileUrl: function (level, row, col) {
+                return "http://219.142.81.86/igserver/ogc/kvp/TAS10A52000000/WMTSServer/1.0.0/TAS10A52000000/default/TAS10A52000000_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
+            }
+        });
+        Mylayer100 = new Mylayer100();
+       
+
+        dojo.declare("Mylayer250", TDTLayer, {
+            getTileUrl: function (level, row, col) {
+                return "http://219.142.81.86/igserver/ogc/kvp/TAS10M52000000/WMTSServer/1.0.0/TAS10M52000000/default/TAS10M52000000_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
+            }
+        });
+        Mylayer250 = new Mylayer250();
+        
+
+        dojo.declare("Mylayer500", TDTLayer, {
+            getTileUrl: function (level, row, col) {
+                return "http://219.142.81.86/igserver/ogc/kvp/TAS10P52100244/WMTSServer/1.0.0/TAS10P52100244/default/TAS10P52100244_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
+            }
+        });
+        Mylayer500 = new Mylayer500();
+        
+
+        dojo.declare("Mylayer500a", TDTLayer, {
+            getTileUrl: function (level, row, col) {
+                return "http://219.142.81.86/igserver/ogc/kvp/TAS10P52200300/WMTSServer/1.0.0/TAS10P52200300/default/TAS10P52200300_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
+            }
+        });
+        Mylayer500a = new Mylayer500a();
+       
+
+        dojo.declare("Mylayer7500", TDTLayer, {
+            getTileUrl: function (level, row, col) {
+                return "http://219.142.81.86/igserver/ogc/kvp/TAS60S52100040/WMTSServer/1.0.0/TAS60S52100040/default/TAS60S52100040_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
+            }
+        });
+        Mylayer7500 = new Mylayer7500();
+           
+
+        var pt = new Point(103.847, 36.0473);
+        map.centerAndZoom(pt, 2);    
+    });
+
+    $('#layer').on('click', function () {
+        var c = $('#layer').is(':checked');
+        if (c) { map.addLayer(Mylayer); }
+        else { map.removeLayer(Mylayer); }
+    });
+
+    $('#25w').on('click', function () { 
+        var c = $('#25w').is(':checked');
+        if (c) { map.addLayer(Mylayer25); }
+        else { map.removeLayer(Mylayer25); }
+    });
+    $('#50w').on('click', function () {
+        var c = $('#50w').is(':checked');
+        if (c) { map.addLayer(Mylayer50); }
+        else { map.removeLayer(Mylayer50); }
+    });
+    $('#100w').on('click', function () {
+        var c = $('#100w').is(':checked');
+        if (c) { map.addLayer(Mylayer100); }
+        else { map.removeLayer(Mylayer100); }
+    });
+    $('#250w').on('click', function () {
+        var c = $('#250w').is(':checked');
+        if (c) { map.addLayer(Mylayer250); }
+        else { map.removeLayer(Mylayer250); }
+    });
+    $('#500w').on('click', function () {
+        var c = $('#500w').is(':checked');
+        if (c) { map.addLayer(Mylayer500); }
+        else { map.removeLayer(Mylayer500); }
+    });
+    $('#500aw').on('click', function () {
+        var c = $('#500aw').is(':checked');
+        if (c) { map.addLayer(Mylayer500a);map.setZoom(2) }
+        else {
+            map.removeLayer(Mylayer500a); map.setZoom(3);
+            var pt = new Point(103.847, 36.0473);
+            map.centerAndZoom(pt, 2);
+        }
+    });
+    $('#7500w').on('click', function () {
+        var c = $('#7500w').is(':checked');
+        if (c) { map.addLayer(Mylayer7500); map.setZoom(1); }
+        else {
+            map.removeLayer(Mylayer7500); map.setZoom(3);
+            var pt = new Point(103.847, 36.0473);
+            map.centerAndZoom(pt, 2);
+        }
+    });
+
+    $('sx').on('click', function () {
+        var c = $('#sx').is(':checked');
+        if (c) {
+            dojo.connect(map, "click", myOnClickHandler);
+        } else { }
+    });
+
+    function myOnClickHandler(mouseEvent) {
+        dojo.declare("myWMSLayer", esri.layers.DynamicMapServiceLayer, {
+            constructor: function () {
+                this.initialExtent = this.fullExtent = new esri.geometry.Extent({ "xmin": -180, "ymin": -90, "xmax": 180, "ymax": 90, "spatialReference": { "wkid": 4326 } });
+                this.spatialReference = new esri.SpatialReference({ wkid: 4326 });
+
+                this.loaded = true;
+                this.onLoad(this);
+            },
+            getImageUrl: function (extent, width, height, callback) {
+                var e = mouseEvent || window.event;
+                var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+                var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+                var x = e.pageX || e.clientX + scrollX;
+                var y = e.pageY || e.clientY + scrollY;
+                var params = {                    
+                    request: "getfeatureinfo",
+                    transparent: true,
+                    format: "xml/html",
+                    version: "1.1.1",
+                    layers: "0",
+                    query_layers:"0",
+                    srs: "EPSG:" + extent.spatialReference.wkid,
+                    X:x,
+                    Y:y,
+                    height: height,
+                    width:width,
+                    bbox: extent.xmin + "," + extent.ymin + "," + extent.xmax + "," + extent.ymax,
+                    query_layers:"0"
+                };
+                callback("http://219.142.81.85/arcgis/services/0refield/MapServer/WMSServer?" + dojo.objectToQuery(params));
+            }
+        });
+        var myWmsLayer = new myWMSLayer();
+        alert(myWmsLayer);
+        map.addLayer(myWmsLayer);        
+    }
+
+    function doMeasure(geometry) {
+        //更加类型设置显示样式
+        measuregeometry = geometry;
+        navDraw.deactivate();
+        switch (geometry.type) {
+            case "point":
+                var symbol = new esri.symbol.SimpleMarkerSymbol(
+                    esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE,    // 样式,STYLE_CIRCLE(●),STYLE_CROSS(+),STYLE_DIAMOND(◆),STYLE_SQUARE(■),STYLE_X(X)  
+                    10, // 像素  
+                    new esri.symbol.SimpleLineSymbol(
+                        esri.symbol.SimpleLineSymbol.STYLE_SOLID,  // 样式,STYLE_DASH(破折号),STYLE_DASHDOT(点划线),STYLE_DASHDOTDOT,STYLE_DOT(点),STYLE_NULL,STYLE_SOLID(实线)  
+                        new dojo.Color([0, 0, 255]),  // 颜色  
+                        2  // 像素  
+                    ),
+                    new dojo.Color([255, 255, 255, 0.25])  // 颜色和透明度  
+                );
+                break;
+            case "polyline":
+                var symbol = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([0, 0, 255]), 3);
+                break;
+            case "polygon":
+                var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([0, 0, 255]), 2), new dojo.Color([0, 0, 255, 0.25]));
+                break;
+            case "extent":
+                var symbol = new esri.symbol.SimpleFillSymbol(
+                    esri.symbol.SimpleFillSymbol.STYLE_SOLID,
+                    new esri.symbol.SimpleLineSymbol(
+                        esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                        new dojo.Color([0, 0, 255]),
+                        2
+                    ),
+                    new dojo.Color([255, 255, 0, 0.25])
+                );
+                break;
+            case "multipoint":
+                var symbol = new esri.symbol.SimpleMarkerSymbol(
+                    esri.symbol.SimpleMarkerSymbol.STYLE_SOLID,
+                    12,
+                    new esri.symbol.SimpleLineSymbol(
+                        esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+                        new dojo.Color([0, 0, 255]),
+                        2
+                    ),
+                    new dojo.Color([255, 255, 255, 0.5])
+                );
+                break;
+        }
+        //设置样式
+        var graphic = new esri.Graphic(geometry, symbol);
+        //清除上一次的画图内容
+        // map.graphics.clear();
+        map.graphics.add(graphic);
+        //进行投影转换，完成后调用projectComplete
+    }
+
+    function addToMap(evt) {
+        var symbol;
+        navDraw.deactivate();
+        map.showZoomSlider();
+        switch (evt.geometry.type) { 
+            case "polyline":
+                symbol = new esri.symbol.SimpleLineSymbol();
+                break;    
+        }
+        var graphic = new esri.Graphic(evt.geometry, symbol);
+        map.graphics.add(graphic);
+    }
+    
+    function Polyline() {
+        navDraw.activate(esri.toolbars.Draw.POLYLINE);       
+    }
+    </script>
+   
+    
+   
+</body>
+
+</html>
