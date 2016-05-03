@@ -17,9 +17,9 @@ namespace Libra
         public string s = "";
         protected void Page_Load(object sender, EventArgs e)
         {
-           string url = "http://219.142.81.85/arcgis/services/0refield/MapServer/WMSServer?request=getfeatureinfo&transparent=true&format=xml%2Fhtml&version=1.1.1&layers=0&query_layers=0&srs=EPSG%3A4326&X=778&Y=409&height=959&width=951&bbox=82.67634570312498%2C35.50896992187501%2C93.12434374999998%2C46.04485859375001";
-            string url1 = "http://219.142.81.85/arcgis/services/0refield/MapServer/WMSServer?request=getfeatureinfo&transparent=true&format=xml%2Fhtml&version=1.1.1&layers=0&query_layers=0&srs=EPSG%3A4326&X=719&Y=500&height=959&width=951&bbox=72.99739062499998%2C16.096128125000007%2C114.78938281249998%2C58.23968281250001";
-            Read_Xml(url);
+            string url = Request.QueryString["url"] == null ? "" : Request.QueryString["url"];
+            if (url != null) { Read_Xml(url); }
+            else { s = "error"; }
             //s = "sdafa";
         }
 

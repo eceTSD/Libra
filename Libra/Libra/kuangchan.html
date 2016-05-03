@@ -4,9 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
 	<meta charset="utf-8" />
-    </style>
-
-    <script src="js/prefixfree.min.js"></script>
+        <script src="js/prefixfree.min.js"></script>
     <script type="text/javascript">
     dojoConfig = {
         parseOnLoad: true,
@@ -20,6 +18,14 @@
     <link rel="stylesheet" href="http://js.arcgis.com/3.6/js/dojo/dijit/themes/tundra/tundra.css">
 
     <script src="http://js.arcgis.com/3.6/"></script>
+    <style>
+        body, html, #main {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style> 
 </head>
 <body>
     <div id="map" style="height:100%;width:100%"></div>
@@ -59,13 +65,15 @@
         map.addLayer(basemap);
         var annolayer = new TDTAnnoLayer();
         map.addLayer(annolayer);
+        var pt = new Point(103.847, 36.0473);
+        map.centerAndZoom(pt, 2);
         //navDraw = new Draw(map);
         //navDraw.on("draw-end", addToMap);
         dojo.connect(map, "onClick", myOnClickHandler);
         //dojo.connect(navDraw, "onDrawEnd", doMeasure);
         dojo.declare("myWMSLayer", esri.layers.DynamicMapServiceLayer, {
             constructor: function () {
-                this.initialExtent = this.fullExtent = new esri.geometry.Extent({ "xmin": -180, "ymin": -90, "xmax": 180, "ymax": 90, "spatialReference": { "wkid": 4326 } });
+                this.initialExtent = this.fullExtent = new esri.geometry.Extent({ "xmin": 60, "ymin": 10, "xmax": 151, "ymax": 60, "spatialReference": { "wkid": 4326 } });
                 this.spatialReference = new esri.SpatialReference({ wkid: 4326 });
 
                 this.loaded = true;
@@ -93,43 +101,32 @@
         map.addLayer(myWmsLayer);
     });
 
-        function myOnClickHandler(mouseEvent) {
-            dojo.declare("myWMSLayer", esri.layers.DynamicMapServiceLayer, {
-                constructor: function () {
-                    this.initialExtent = this.fullExtent = new esri.geometry.Extent({ "xmin": -180, "ymin": -90, "xmax": 180, "ymax": 90, "spatialReference": { "wkid": 4326 } });
-                    this.spatialReference = new esri.SpatialReference({ wkid: 4326 });
+    function myOnClickHandler(mouseEvent) {   
+            var e = mouseEvent || window.event;
+            var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+            var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+            var x = e.pageX || e.clientX + scrollX;
+            var y = e.pageY || e.clientY + scrollY;
+            var params = {
+                request: "getfeatureinfo",
+                transparent: true,
+                format: "xml/html",
+                version: "1.1.1",
+                layers: "0",
+                query_layers: "0",
+                srs: "EPSG:" + map.extent.spatialReference.wkid,
+                X: x,
+                Y: y,
+                height: map.height,
+                width: map.width,
+                bbox: map.extent.xmin + "," + map.extent.ymin + "," + map.extent.xmax + "," + map.extent.ymax,
+                query_layers: "0"
+            }        
+            var info = "http://219.142.81.85/arcgis/services/0refield/MapServer/WMSServer?" + dojo.objectToQuery(params);
+            
+            window.open("GetMapInfo.aspx?url=" +encodeURIComponent(info));
 
-                    this.loaded = true;
-                    this.onLoad(this);
-                },
-                getImageUrl: function (extent, width, height, callback) {
-                    var e = mouseEvent || window.event;
-                    var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
-                    var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
-                    var x = e.pageX || e.clientX + scrollX;
-                    var y = e.pageY || e.clientY + scrollY;
-                    var params = {
-                        request: "getfeatureinfo",
-                        transparent: true,
-                        format: "xml/html",
-                        version: "1.1.1",
-                        layers: "0",
-                        query_layers:"0",
-                        srs: "EPSG:" + extent.spatialReference.wkid,
-                        X:x,
-                        Y:y,
-                        height: height,
-                        width:width,
-                        bbox: extent.xmin + "," + extent.ymin + "," + extent.xmax + "," + extent.ymax,
-                        query_layers:"0"
-                    };
-                    callback("http://219.142.81.85/arcgis/services/0refield/MapServer/WMSServer?" + dojo.objectToQuery(params));
-                }
-            });
-            var myWmsLayer = new myWMSLayer();
-            map.addLayer(myWmsLayer);
         }
-
 
    
 </script>
