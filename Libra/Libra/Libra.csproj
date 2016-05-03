@@ -183,6 +183,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Account\Web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="GetMapInfo.aspx" />
     <Content Include="kuangchan.html" />
     <Content Include="quanguo.html" />
     <Content Include="js\index.js" />
@@ -367,6 +368,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GetMapInfo.aspx.cs">
+      <DependentUpon>GetMapInfo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GetMapInfo.aspx.designer.cs">
+      <DependentUpon>GetMapInfo.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
