@@ -158,3 +158,11 @@ E:\Libra\Libra\Libra\bin\zh-Hans\Microsoft.Owin.Security.MicrosoftAccount.resour
 E:\Libra\Libra\Libra\obj\Debug\Libra.csprojResolveAssemblyReference.cache
 E:\Libra\Libra\Libra\obj\Debug\Libra.dll
 E:\Libra\Libra\Libra\obj\Debug\Libra.pdb
+E:\Libra\Libra\Libra\bin\mysql.data.dll
+E:\Libra\Libra\Libra\bin\mysql.data.entity.dll
+E:\Libra\Libra\Libra\bin\mysql.visualstudio.dll
+E:\Libra\Libra\Libra\bin\mysql.web.dll
+E:\Libra\Libra\Libra\bin\EnvDTE.dll
+E:\Libra\Libra\Libra\bin\EnvDTE80.dll
+E:\Libra\Libra\Libra\bin\Microsoft.MSXML.dll
+E:\Libra\Libra\Libra\bin\stdole.dll

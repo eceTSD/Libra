@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace Libra
         protected void Page_Load(object sender, EventArgs e)
         {
             string url = Request.QueryString["url"] == null ? "" : Request.QueryString["url"];
-            if (url != null) { Read_Xml(url); }
+            if (url != "") { Read_Xml(url); }
             else { s = "error"; }
-            //s = "sdafa";
+            mysql();
         }
 
         public void Read_Xml(string Url)
@@ -81,11 +82,20 @@ namespace Libra
             {
                 s = "nothing";
             }
-           
+        }
 
-
-
-            // s = "sdafa";
+        public void mysql()
+        {
+            string constr = "server=localhost;User Id=root;password=\"\";Database=mytest";
+            MySqlConnection mycon = new MySqlConnection(constr);
+            mycon.Open();
+            MySqlCommand mycmd = new MySqlCommand("insert into buyer(name,password,email) values('小王','dikd3939','1134384387@qq.com')", mycon);
+            if (mycmd.ExecuteNonQuery() > 0)
+            {
+                Console.WriteLine("数据插入成功！");
+            }
+            Console.ReadLine();
+            mycon.Close();
         }
     }
 }
