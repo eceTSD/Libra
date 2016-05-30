@@ -182,18 +182,26 @@
     <Content Include="Account\ResetPasswordConfirmation.aspx" />
     <Content Include="Account\TwoFactorAuthenticationSignIn.aspx" />
     <Content Include="Account\VerifyPhoneNumber.aspx" />
+    <Content Include="cdcatalog.xml" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="css\check_mark.png" />
+    <Content Include="css\jquery.spinner.css" />
     <Content Include="css\reset.css" />
+    <Content Include="css\spinner-sf0d5bd965d.png" />
     <Content Include="css\style.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Account\Web.config" />
+    <Content Include="abc.json" />
+    <Content Include="js\jquery.simple-color.js" />
+    <Content Include="js\jquery.spinner.js" />
+    <Content Include="wfq.html" />
+    <Content Include="zzzz.aspx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="GetMapInfo.aspx" />
     <Content Include="kuangchan.html" />
@@ -414,6 +422,10 @@
     </Compile>
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="zzzz.aspx.cs">
+      <DependentUpon>zzzz.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Libra.App_Start;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +22,7 @@ namespace Libra
             string url = Request.QueryString["url"] == null ? "" : Request.QueryString["url"];
             if (url != "") { Read_Xml(url); }
             else { s = "error"; }
-            mysql();
+         //   mysql();
         }
 
         public void Read_Xml(string Url)
@@ -82,6 +83,18 @@ namespace Libra
             {
                 s = "nothing";
             }
+
+            menu menu = new menu();
+            menu.Name = "";
+            menu.Title = "";
+            menu.Description1 = "";
+            menu.PicUrl1 = "";
+            menu.Url1 = "";
+            List<menu> menus = new List<menu>();
+            menus.Add(menu);
+
+
+           
         }
 
         public void mysql()
