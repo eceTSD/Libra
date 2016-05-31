@@ -6,9 +6,9 @@
   <meta charset="UTF-8">
 
   <title>MapTest</title>
-  <link rel="stylesheet" href="css/jquery.spinner.css" />
+  <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css" />
 <script type="text/javascript" src="http://libs.useso.com/js/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery.spinner.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
     <script type="text/javascript" src="js/jquery.simple-color.js"></script>
     <script src="js/prefixfree.min.js"></script>
     <script type="text/javascript">
@@ -30,7 +30,7 @@
 </head>
 
 <body >
-    <div class="wrapper" style="z-index:100">
+    <div class="wrapper" style="float:left">
         <ul>
             <li>
                 <p>图层选择:</p>
@@ -59,29 +59,32 @@
             <li>
                 <input type="checkbox" name="check-box" id="7500w" /> <span>1:7500万全球构造分布图</span>
             </li>
-            <li>
-                <input type="text" class="spinner" />
-            </li>
-            <li>
-                <h3>选择颜色</h3>
-                <input class='simple_color_callback' value='#cc3333' />
-            </li>
-            <li>
-                <input type="button" value="确定" onclick="Csscheck()" style="width:30px;height:auto" />
-            </li>
-            <li>
-                <input type="button" value="画线" onclick="Polyline()" style="width:30px;height:auto" />
-            </li>
+           
         </ul>
        
+    </div>
+    <div style="margin-left:400px">
+        <h3>选择线条宽度</h3>
+        <input type="text" id="spinner2" style="width:80px" value="0" />
+
+
+        <h3>选择线条颜色</h3>
+        <input class='simple_color_callback' value='#000000' />
+        <h3>选择填充颜色</h3>
+        <input class='simple_color_callback1' value='#000000' />
+        <input type="button" value="确定" onclick="Csscheck()" style="width:50px;height:auto" />
+        <input type="button" value="画线" onclick="Polyline()" style="width:50px;height:auto" />
+        <input type="button" value="画面" onclick="Polygon()" style="width:50px;height:auto" />
     </div>
     <div id="map" style="height:1300px;width:1600px;z-index:10" ></div>
     <script type="text/javascript">
     var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
     var map, mylayer;
-    var color;
+    var color,areacolor;
+    var num;
     var line = 1;
     var sRgbColors = "0,0,0";
+    var argbaColor = "0,0,0,0.25"
     require(["esri/map",
         "tdlib/TDTLayer",
         "tdlib/TDTAnnoLayer",
@@ -132,7 +135,7 @@
 
         dojo.declare("Mylayer25", TDTLayer, {
             getTileUrl: function (level, row, col) {
-                return "http://219.142.81.86/igserver/ogc/kvp/TAS10C52000000/WMTSServer/1.0.0/TAS10C52000000/default/TAS10C52000000_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
+                return "http://219.142.81.85/arcgis/rest/services/20wanQD/MapServer/17/1.0.0/TAS10C52000000/default/TAS10C52000000_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
             }
         });
         Mylayer25 = new Mylayer25();
@@ -269,7 +272,7 @@
                 var symbol = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color(color), line);
                 break;
             case "polygon":
-                var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([0, 0, 255]), 2), new dojo.Color([0, 0, 255, 0.25]));
+                var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color(color), line), new dojo.Color(areacolor));
                 break;
             case "extent":
                 var symbol = new esri.symbol.SimpleFillSymbol(
@@ -319,14 +322,25 @@
     function Polyline() {
         navDraw.activate(esri.toolbars.Draw.POLYLINE);       
     }
-
+    function Polygon() {
+        navDraw.activate(esri.toolbars.Draw.POLYGON);
+    }
     function Csscheck() {
         color = sRgbColors.split(",");
-        line = $('.spinner').spinner("value");
-        alert("样式确定");
+        areacolor = argbaColor.split(",")
+        line = num;
+        alert("ok");     
     }
+    $("#spinner2").spinner({
+        max: 10,
+        min: 0,
+        step: 1,
+        change: function (event, ui) {
+           num = $(this).val();
+        }
+    });
+   
 
-    $('.spinner').spinner();
     $('.simple_color_callback').simpleColor({
         onSelect: function (hex, element) {
             var sHex = "#" + hex;
@@ -334,6 +348,14 @@
             alert("You selected #" + sRgbColors + " for input #" + element.attr('class'));
         }
     });
+    $('.simple_color_callback1').simpleColor({
+        onSelect: function (hex, element) {
+            var sHex = "#" + hex;
+            argbaColor = sHex.colorRgb() + ",0.5";
+            alert("You selected #" + argbaColor + " for input #" + element.attr('class'));
+        }
+    });
+
     String.prototype.colorRgb = function () {
         var sColor = this.toLowerCase();
         if (sColor && reg.test(sColor)) {
