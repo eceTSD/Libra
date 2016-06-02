@@ -31,7 +31,7 @@
 
 <body >
     <div class="wrapper" style="float:left">
-        <ul>
+        <ul id="layerlist">
             <li>
                 <p>图层选择:</p>
             </li>
@@ -48,22 +48,26 @@
                 <input type="checkbox" name="check-box" id="100w" /> <span>1:100万中国地质图</span>
             </li>
             <li>
-                <input type="checkbox" name="check-box" id="250w" /> <span>1:250万中国地质图</span>
+                <input type="checkbox" name="check-box" id="250w"  /> <span>1:250万中国地质图</span>
             </li>
             <li>
                 <input type="checkbox" name="check-box" id="500w" /> <span>1:500万中国地质图</span>
             </li>
             <li>
-                <input type="checkbox" name="check-box" id="500aw" /> <span>1:500万亚洲地质图</span>
+                <input type="checkbox" name="check-box" id="500aw"  /> <span>1:500万亚洲地质图</span>
             </li>
             <li>
                 <input type="checkbox" name="check-box" id="7500w" /> <span>1:7500万全球构造分布图</span>
-            </li>
-           
+            </li>          
         </ul>
-       
+        
+            <p>自定义图层:</p>
+        
+       <ul id="newlayerlist">
+         
+       </ul>
     </div>
-    <div style="margin-left:400px">
+    <div style="float:left;margin-left:200px">
         <h3>选择线条宽度</h3>
         <input type="text" id="spinner2" style="width:80px" value="0" />
 
@@ -76,10 +80,21 @@
         <input type="button" value="画线" onclick="Polyline()" style="width:50px;height:auto" />
         <input type="button" value="画面" onclick="Polygon()" style="width:50px;height:auto" />
     </div>
+    <div style="float:left;margin-left:200px">
+        <h3>添加自定义图层</h3>
+        <h3>服务名称</h3>
+        <input type="text" id="name" value="wmts服务" />
+        <h3>服务地址</h3>
+        <input type="text" id="address"value="wmts服务" />
+        <input type="button" value="确定" id="addlayer"  style="width:50px;height:auto" />
+    </div>
     <div id="map" style="height:1300px;width:1600px;z-index:10" ></div>
     <script type="text/javascript">
     var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
     var map, mylayer;
+    var tdlayer;
+    var layernumber = 0;
+    var newlayerlist= new Array();
     var color,areacolor;
     var num;
     var line = 1;
@@ -113,17 +128,14 @@
          SimpleLineSymbol,
          Color
     ) {
-        map = new Map("map", { logo: false });
+        map = new Map("map", { logo: false, isZoomSlider: true });
+        tdlayer = new TDTLayer();
         var basemap = new TDTLayer();
         map.addLayer(basemap);
         var annolayer = new TDTAnnoLayer();
         map.addLayer(annolayer);
-        navDraw = new Draw(map);
-      //  navDraw.on("draw-end", addToMap);
-    
-        dojo.connect(navDraw, "onDrawEnd", doMeasure);      
-         
-        
+        navDraw = new Draw(map);   
+        dojo.connect(navDraw, "onDrawEnd", doMeasure);              
         dojo.declare("Mylayer", TDTLayer, {
             getTileUrl: function (level, row, col) {
                 return "http://219.142.81.86/igserver/ogc/kvp/TAS10A52299999/WMTSServer/1.0.0/TAS10A52299999/default/TAS10A52299999_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
@@ -135,12 +147,11 @@
 
         dojo.declare("Mylayer25", TDTLayer, {
             getTileUrl: function (level, row, col) {
-                return "http://219.142.81.85/arcgis/rest/services/20wanQD/MapServer/17/1.0.0/TAS10C52000000/default/TAS10C52000000_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
+                return "http://219.142.81.85/arcgis/rest/services/20wanQD/MapServer/17/1.0.0/TAS10C52000000/default/EPSG:4326TAS10C52000000_dpi96_GB/" + (level - 1) + "/" + row + "/" + col + ".png";
             }
         });
         Mylayer25 = new Mylayer25();
        
-
         dojo.declare("Mylayer50", TDTLayer, {
             getTileUrl: function (level, row, col) {
                 return "http://219.142.81.86/igserver/ogc/kvp/TAS10B52000000/WMTSServer/1.0.0/TAS10B52000000/default/TAS10B52000000_TMS/" + (level - 1) + "/" + row + "/" + col + ".png";
@@ -187,11 +198,65 @@
             }
         });
         Mylayer7500 = new Mylayer7500();
-           
-
         var pt = new Point(103.847, 36.0473);
-        map.centerAndZoom(pt, 2);    
+        map.centerAndZoom(pt, 2);
+
+        $('#addlayer').bind("click", function () {
+           
+            var layername = $('#name').val();
+            
+            var addlayer = layernumber.toString();
+            var layeraddress = $("#address").val();
+            var servername = layeraddress.split('/')[6];
+            dojo.declare("newla", TDTLayer, {
+                getTileUrl: function (level, row, col) {
+                    return layeraddress + "/1.0.0/"+servername+"/default/EPSG:4326"+servername+"_dpi96_GB/" + (level - 1) + "/" + row + "/" + col + ".png";
+                }
+            });
+            newlayer = new newla();
+            newlayerlist.push(newlayer);
+            map.addLayer(newlayer);
+            layernumber++;
+            var msg = "<li><input type=\"checkbox\" name=\"newcheck-box\" id=\"" + layernumber.toString() + "\" onclick=\"isshownewlayer(" + layernumber + ")\" checked=\"checked\" /> <span>" + layername + "</span></li>";
+            $("#newlayerlist").append(msg);
+
+            /* $('#newlayerlist').on('click', '[name="newcheck-box"]', function () {
+                var id = $(this).attr('id');
+                var checked = $(this).is(':checked');
+                if (checked) {
+                    map.addLayer(newlayerlist[parseInt(id)]);
+                } else {
+                    map.removeLayer(newlayerlist[parseInt(id)]);
+                }
+            });
+
+
+
+           var li = document.getElementsByName('newcheck-box');
+            for (var i = 0; i < li.length; i++) {
+                li[i].click(function () {
+                    var c = li[i].is(':checked');
+                    if (c) { map.addLayer(newlayerlist[i]); }
+                    else { map.removeLayer(newlayerlist[i]); }
+                });
+            }*/
+        });
+     
+          
     });
+
+    
+    function isshownewlayer(a) {
+        var id = "#"+a.toString();       
+        var checked = $(id).is(':checked');
+        if (checked) {
+            map.addLayer(newlayerlist[a-1]);
+        } else {
+            map.removeLayer(newlayerlist[a-1]);
+        }
+    }
+    
+    
 
     $('#layer').on('click', function () {
         var c = $('#layer').is(':checked');
@@ -376,7 +441,10 @@
             return sColor;
         }
     }
+
    
+   
+       
     </script>
    
     
