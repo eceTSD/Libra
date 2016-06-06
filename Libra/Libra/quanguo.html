@@ -31,10 +31,9 @@
 
 <body >
     <div class="wrapper" style="float:left">
+        <p>专题图层选择:</p>
         <ul id="layerlist">
-            <li>
-                <p>图层选择:</p>
-            </li>
+    
             <li>
                 <input type="checkbox" name="check-box" id="layer" /> <span>动态比例尺中国地质图</span>
             </li>
@@ -59,8 +58,7 @@
             <li>
                 <input type="checkbox" name="check-box" id="7500w" /> <span>1:7500万全球构造分布图</span>
             </li>          
-        </ul>
-        
+        </ul>  
             <p>自定义图层:</p>
         
        <ul id="newlayerlist">
@@ -203,8 +201,7 @@
 
         $('#addlayer').bind("click", function () {
            
-            var layername = $('#name').val();
-            
+            var layername = $('#name').val();          
             var addlayer = layernumber.toString();
             var layeraddress = $("#address").val();
             var servername = layeraddress.split('/')[6];
@@ -218,33 +215,11 @@
             map.addLayer(newlayer);
             layernumber++;
             var msg = "<li><input type=\"checkbox\" name=\"newcheck-box\" id=\"" + layernumber.toString() + "\" onclick=\"isshownewlayer(" + layernumber + ")\" checked=\"checked\" /> <span>" + layername + "</span></li>";
-            $("#newlayerlist").append(msg);
-
-            /* $('#newlayerlist').on('click', '[name="newcheck-box"]', function () {
-                var id = $(this).attr('id');
-                var checked = $(this).is(':checked');
-                if (checked) {
-                    map.addLayer(newlayerlist[parseInt(id)]);
-                } else {
-                    map.removeLayer(newlayerlist[parseInt(id)]);
-                }
-            });
-
-
-
-           var li = document.getElementsByName('newcheck-box');
-            for (var i = 0; i < li.length; i++) {
-                li[i].click(function () {
-                    var c = li[i].is(':checked');
-                    if (c) { map.addLayer(newlayerlist[i]); }
-                    else { map.removeLayer(newlayerlist[i]); }
-                });
-            }*/
+            $("#newlayerlist").append(msg);          
         });
      
           
     });
-
     
     function isshownewlayer(a) {
         var id = "#"+a.toString();       
